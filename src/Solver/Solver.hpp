@@ -10,17 +10,14 @@ class Solver
 {
 private:
     vector<double> num;
-    vector<string> solution;
     vector<Expression> ops;
-    string input;
-    double convertInput();
-    int getUserInput();
-    void getRandomizedInput();
+    void getPermutation(vector<double>::iterator vec, int vecLen);
+    void swapCard(vector<double>::iterator cardA, vector<double>::iterator cardB);
 
 public:
-    Solver();
-    void getInput();
-    void writeSolution();
+    Solver(double numA, double numB, double numC, double numD);
+    int totalSolution;
+    vector<string> solution;
     void solve();
     void solveAll();
     void displaySolutions();

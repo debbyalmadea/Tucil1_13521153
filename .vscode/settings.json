@@ -8,6 +8,7 @@
     "tuple": "cpp",
     "variant": "cpp",
     "iostream": "cpp",
-    "ostream": "cpp"
+    "ostream": "cpp",
+    "chrono": "cpp"
   }
 }

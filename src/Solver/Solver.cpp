@@ -3,16 +3,21 @@
 #include <cstdlib>
 #include <time.h>
 #include <fstream>
-#include "Solver.hpp"
 #include <chrono>
+#include "Solver.hpp"
 
 double add(double a, double b) { return (a + b); }
 double subtract(double a, double b) { return (a - b); }
 double multiple(double a, double b) { return (a * b); }
 double divide(double a, double b) { return (a / b); }
 
-Solver::Solver()
+Solver::Solver(double numA, double numB, double numC, double numD)
 {
+    num.push_back(numA);
+    num.push_back(numB);
+    num.push_back(numC);
+    num.push_back(numD);
+
     Expression addExpr(&add, '+');
     Expression subExpr(&subtract, '-');
     Expression mulExpr(&multiple, '*');
@@ -21,158 +26,8 @@ Solver::Solver()
     ops.push_back(subExpr);
     ops.push_back(mulExpr);
     ops.push_back(divExpr);
-}
 
-double Solver::convertInput()
-{
-    if (input.length() > 1)
-    {
-        if (input == "10")
-            return 10;
-        else
-            return 0;
-    }
-    else
-    {
-        if (input[0] >= '2' && input[0] <= '9')
-            return (int)(input[0]) - 48;
-
-        if (input == "A")
-            return 1;
-
-        if (input == "J")
-            return 11;
-
-        if (input == "Q")
-            return 12;
-
-        if (input == "K")
-            return 13;
-    }
-
-    return 0;
-}
-
-int Solver::getUserInput()
-{
-
-    int i;
-    string inputline;
-    int count = 0;
-
-    cout << "Input 4 cards:" << endl;
-    getline(cin, inputline);
-    // cout << "line " << inputline << endl;
-
-    for (auto x : inputline)
-    {
-        if (count > 4)
-        {
-            cout << "Invalid input. Too many inputs." << endl;
-            return 0;
-        }
-
-        if (x == ' ')
-        {
-            num.push_back(convertInput());
-            if (!num[count])
-            {
-                cout << "Invalid input. There's no " << input << " symbol in cards." << endl;
-                return 0;
-            }
-            input = "";
-            count++;
-        }
-        else
-        {
-            input = input + x;
-        }
-    }
-    if (input != "")
-    {
-        num.push_back(convertInput());
-        if (!num[count])
-        {
-            cout << "Invalid input. There's no " << input << " symbol in cards." << endl;
-            return 0;
-        }
-        count++;
-    }
-    if (count < 4)
-    {
-        cout << "Invalid input. Too little input." << endl;
-        return 0;
-    }
-
-    // for (i = 0; i < 4; i++)
-    // {
-    //     cin >> input;
-    //     num.push_back(convertInput());
-    //     if (!num[i])
-    //     {
-    //         cin.clear();
-    //         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    //         return 0;
-    //     }
-    // }
-
-    return 1;
-}
-
-void Solver::getRandomizedInput()
-{
-    int i;
-
-    srand(time(0));
-    for (i = 0; i < 4; i++)
-    {
-        num.push_back(rand() % 13 + 1);
-    }
-}
-
-void Solver::getInput()
-{
-    int choice = 999;
-
-    cout << "Choose input method" << endl
-         << "1. Cli Input" << endl
-         << "2. Randomized Input" << endl;
-
-    do
-    {
-        cin >> choice;
-        if (choice == 1)
-        {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            while (!getUserInput())
-            {
-                num.clear();
-                input = "";
-            }
-        }
-        else if (choice == 2)
-        {
-            getRandomizedInput();
-            cout << "Your 4 cards:" << endl
-                 << num[0] << " " << num[1] << " " << num[2] << " " << num[3] << endl;
-        }
-    } while (choice > 2);
-}
-
-void Solver::writeSolution()
-{
-    string filename;
-    cout << "Input filename (incl .txt): ";
-    cin >> filename;
-    ofstream MyFile("../../test/" + filename);
-
-    for (auto sol : solution)
-    {
-        MyFile << sol << endl;
-    }
-
-    cout << "Solution saved in folder test" << endl;
-    MyFile.close();
+    totalSolution = 0;
 }
 
 void Solver::solve()
@@ -193,18 +48,21 @@ void Solver::solve()
                 if (op3.eval(op2.eval(op1.eval(num[0], num[1]), num[2]), num[3]) == 24)
                 {
                     solution.push_back("((" + strA + " " + op1.getSymbol() + " " + strB + ")" + " " + op2.getSymbol() + " " + strC + ")" + " " + op3.getSymbol() + " " + strD + ")");
+                    totalSolution++;
                 }
 
                 // (a op (b op c)) op d
                 if (op3.eval(op1.eval(num[0], op2.eval(num[1], num[2])), num[3]) == 24)
                 {
                     solution.push_back("(" + strA + " " + op1.getSymbol() + " " + "(" + strB + " " + op2.getSymbol() + " " + strC + "))" + " " + op3.getSymbol() + " " + strD);
+                    totalSolution++;
                 }
 
                 // a op ((b op c) op d)
                 if (op1.eval(num[0], op3.eval(op2.eval(num[1], num[2]), num[3])) == 24)
                 {
                     solution.push_back(strA + " " + op1.getSymbol() + " " + "((" + strB + " " + op2.getSymbol() + " " + strC + ")" + " " + op3.getSymbol() + " " + strD + ")");
+                    totalSolution++;
                 }
 
                 // a op (b op (c op d))
@@ -212,12 +70,14 @@ void Solver::solve()
                 if (op1.eval(num[0], op2.eval(num[1], op3.eval(num[2], num[3]))) == 24)
                 {
                     solution.push_back(strA + " " + op1.getSymbol() + " " + "(" + strB + " " + op2.getSymbol() + " " + "(" + strC + " " + op3.getSymbol() + " " + strD + "))");
+                    totalSolution++;
                 }
 
                 // (a op b) op (c op d)
                 if (op2.eval(op1.eval(num[0], num[1]), op3.eval(num[2], num[3])) == 24)
                 {
                     solution.push_back("(" + strA + " " + op1.getSymbol() + " " + strB + ")" + " " + op2.getSymbol() + " " + "(" + strC + " " + op3.getSymbol() + " " + strD + ")");
+                    totalSolution++;
                 }
             }
         }
@@ -226,13 +86,14 @@ void Solver::solve()
 
 void Solver::displaySolutions()
 {
-    if (solution.size() == 0)
+    if (totalSolution == 0)
     {
         cout << "No Solution." << endl;
     }
     else
     {
-        cout << "Solution: " << solution.size() << endl;
+        cout << "Total solution: " << totalSolution << endl
+             << "List of solution(s):" << endl;
         for (auto x : solution)
         {
             cout << x << endl;
@@ -240,26 +101,42 @@ void Solver::displaySolutions()
     }
 }
 
-void Solver::solveAll()
+void Solver::swapCard(vector<double>::iterator cardA, vector<double>::iterator cardB)
 {
-    int choice;
-    auto start = chrono::high_resolution_clock::now();
-    sort(num.begin(), num.end());
+    double tempA = *(cardA);
+    *(cardA) = *(cardB);
+    *(cardB) = tempA;
+}
 
-    do
+void Solver::getPermutation(vector<double>::iterator vec, int vecLen)
+{
+    bool visited[13];
+    for (int i = 0; i < 13; i++)
+    {
+        visited[i] = false;
+    }
+
+    if (vecLen == 1)
     {
         solve();
-        // TODO: ALTERNATES FOR NEXT PERMUTATION
-    } while (next_permutation(num.begin(), num.end()));
-
-    displaySolutions();
-    auto end = chrono::high_resolution_clock::now();
-    cout << "Execution time: " << chrono::duration_cast<chrono::milliseconds>(end - start).count() << "ms" << endl;
-    cout << "Save this solution? (1. YES, 2. NO)" << endl
-         << "Your choice: ";
-    cin >> choice;
-    if (choice == 1)
-    {
-        writeSolution();
     }
+    else
+    {
+        for (int i = 0; i < vecLen; i++)
+        {
+            if (!visited[(int)*(vec + i)])
+            {
+                visited[(int)*(vec + i)] = true;
+                swapCard(vec, (vec + i));
+                getPermutation(vec + 1, vecLen - 1);
+                swapCard(vec, (vec + i));
+            }
+        }
+    }
+}
+
+void Solver::solveAll()
+{
+    getPermutation(num.begin(), 4);
+    displaySolutions();
 }
