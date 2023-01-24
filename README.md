@@ -1,7 +1,7 @@
 # Tucil1_13521153: 24 Solver
 
 ## Deskripsi singkat
-Program Penyelesaian Permainan Kartu 24 menggunakan Algoritma Brute Force untuk mencari semua solusi dari permainan Kartu 24. Program menerima masukan berupa 4 buah kartu A, 2-10, J, Q, K dengan A bernilai 1, J bernilai 11, Q bernilai 12, K bernilai 13. Program dibangun dengan bahasa c++.
+Program Penyelesaian Permainan Kartu 24 menggunakan Algoritma Brute Force untuk mencari semua solusi dari permainan Kartu 24. Program menerima masukan berupa 4 buah kartu A, 2-10, J, Q, K (tidak case sensitive) dengan A bernilai 1, J bernilai 11, Q bernilai 12, K bernilai 13. Program dibangun dengan bahasa c++.
 
 ## Requirement
 - c++ minimal versi 11 atau terbaru
