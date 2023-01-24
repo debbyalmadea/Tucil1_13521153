@@ -10,7 +10,7 @@ Program Penyelesaian Permainan Kartu 24 menggunakan Algoritma Brute Force untuk 
 1. Pastikan device telah terpasang g++ compiler yang mensupport c++ versi 11 
 2. Ubah direktori menjadi direktori `bin` 
 3. Pada cmd, jalankan command `g++ -o main ../src/Solver/Solver.cpp ../src/Expression/Expression.cpp ../src/main.cpp -std=c++11`. Pastikan kompilasi berhasil dan file binary `main` akan muncul pada direktori tersebut untuk MAC OS/linux dan file `main.exe`
-3. Jalankan command `./main` untuk MAC OS/linux dan `main` untuk windows
+3. Jalankan command `./main` 
 4. Masukkan input sesuai perintah. Untuk input kartu, format berupa 4 buah kartu A, 2-10, J, Q, dan K dan setiap kartu dipisahkan oleh spasi. Contoh: A A 6 4
 
 ## Author
