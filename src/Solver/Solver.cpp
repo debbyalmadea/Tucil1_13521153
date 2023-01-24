@@ -150,7 +150,7 @@ void Solver::getRandomizedInput()
 void Solver::getInput()
 {
     // @brief interface untuk memperoleh input kartu
-    int choice = 999;
+    char choice = '9';
     cout << "Welcome to 24 Solver!" << endl;
     cout << "====================" << endl;
     cout << "Choose input method" << endl
@@ -162,7 +162,7 @@ void Solver::getInput()
         cout << ">> Your choice: ";
         cin >> choice;
         cout << endl;
-        if (choice == 1)
+        if (int(choice) - 48 == 1)
         {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             while (!getUserInput())
@@ -172,7 +172,7 @@ void Solver::getInput()
             }
             cout << endl;
         }
-        else if (choice == 2)
+        else if (int(choice) - 48 == 2)
         {
             getRandomizedInput();
             cout << "Your 4 cards are:" << endl;
@@ -180,7 +180,7 @@ void Solver::getInput()
             cout << endl
                  << endl;
         }
-    } while (choice > 2);
+    } while (int(choice) - 48 > 2);
 }
 
 int Solver::writeSolution(string path, string filename)
@@ -321,7 +321,7 @@ void Solver::solveAll()
 {
     /* @brief mencari semua solusi dari semua permutasi dari
      permainan kartu 24 */
-    int choice = 999;
+    char choice = '9';
     auto start = chrono::high_resolution_clock::now();
     getPermutation(num.begin(), 4);
     auto end = chrono::high_resolution_clock::now();
@@ -339,7 +339,7 @@ void Solver::solveAll()
     {
         cout << ">> Your choice: ";
         cin >> choice;
-        if (choice == 1)
+        if (int(choice) - 48 == 1)
         {
             string filename;
 
@@ -355,5 +355,5 @@ void Solver::solveAll()
             cout << "File saved in folder test!" << endl;
         }
 
-    } while (choice > 2);
+    } while (int(choice) - 48 > 2);
 }
