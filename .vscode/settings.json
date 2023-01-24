@@ -1,8 +1,0 @@
-{
-  "files.associations": {
-    "ios": "cpp",
-    "limits": "cpp",
-    "chrono": "cpp",
-    "ostream": "cpp"
-  }
-}
