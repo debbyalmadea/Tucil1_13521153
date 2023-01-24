@@ -346,7 +346,7 @@ void Solver::solveAll()
             cout << ">> Input filename (incl .txt): ";
             cin >> filename;
 
-            while (!writeSolution("../test/", filename))
+            while (!writeSolution("test/", filename))
             {
                 cout << ">> Input filename (incl .txt): ";
                 cin >> filename;
