@@ -94,7 +94,7 @@ int Solver::getUserInput()
 
     for (auto x : inputline)
     {
-        if (count > 4)
+        if (count > 3)
         {
             cout << "Invalid input. Too many inputs." << endl;
             return 0;
